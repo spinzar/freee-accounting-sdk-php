@@ -15,10 +15,7 @@ jobs:
     steps:
     - name: Install packages
       run: |
-        sudo apt install snapd
-        sudo apt update
-        sudo apt install -y \
-          yq
+        snap install yq
 
     - uses: actions/checkout@v2
 
