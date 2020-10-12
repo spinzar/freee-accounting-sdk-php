@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 env:
-  PACKAGE_NAME: freee\/freee-accounting-sdk
+  PACKAGE_NAME: freee/freee-accounting-sdk
   SCHEMA_URL: https://gist.githubusercontent.com/shibayan/3fdf5a66554e5e7ccfe4cc8350db86d7/raw/64548c7ad8bb4c65c0bbe1748ca8f759da648aa6/api-schema.yml
   KEEP_CURRENT_HEADER_SELECTOR: true
 
@@ -36,17 +36,13 @@ jobs:
           -o /local/
         rm -rf .travis.yml git_push.sh
         mv -f README.md README_auto-generated.md
-        sed -i -e 's/freee\/freee-accounting-sdk-php/${{ env.PACKAGE_NAME }}/g' README_auto-generated.md
+        sed -i -e 's#freee/freee-accounting-sdk-php[^(\.git)]#${{ env.PACKAGE_NAME }}#g' README_auto-generated.md
         git checkout README.md
 
     - name: Maintain composer.json
       run: |
-        cat composer.json | jq '. | .name = "${{ env.PACKAGE_NAME }}"' > composer.json
-        cat composer.json | jq '. | .type = "library"' > composer.json
-        cat composer.json | jq '. | .description = "Accounting freee PHP SDK"' > composer.json
-        cat composer.json | jq '. | .keywords += "api"' > composer.json
-        cat composer.json | jq '. | .homepage = "https://developer.freee.co.jp/"' > composer.json
-        cat composer.json | jq '. | .license = "MIT"' > composer.json
+        cat composer.json | jq '. | .name = "${{ env.PACKAGE_NAME }}" | .type = "library" | .description = "Accounting freee PHP SDK" | .keywords += ["api"] | .homepage = "https://developer.freee.co.jp/" | .license = "MIT" | .authors[0].name = "Freee" | .authors[0].homepage = "https://developer.freee.co.jp/"' > composer.json.tmp
+        mv -f composer.json.tmp composer.json
 
     - name: Revert HeaderSelector
       if: ${{ env.KEEP_CURRENT_HEADER_SELECTOR }}
