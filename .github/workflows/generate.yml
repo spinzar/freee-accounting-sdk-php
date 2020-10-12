@@ -41,7 +41,7 @@ jobs:
 
     - name: Maintain composer.json
       run: |
-        cat composer.json | jq --indent 4 '. | .name = "${{ env.PACKAGE_NAME }}" | .type = "library" | .description = "Accounting freee PHP SDK" | .keywords += ["api"] | .homepage = "https://developer.freee.co.jp/" | .license = "MIT" | .authors[0].name = "Freee" | .authors[0].homepage = "https://developer.freee.co.jp/"' > composer.json.tmp
+        cat composer.json | jq --indent 4 '. | .name = "${{ env.PACKAGE_NAME }}" | .type = "library" | .description = "Accounting freee PHP SDK" | .keywords += ["freee"] | .homepage = "https://developer.freee.co.jp/" | .license = "MIT" | .authors[0].name = "Freee" | .authors[0].homepage = "https://developer.freee.co.jp/"' > composer.json.tmp
         mv -f composer.json.tmp composer.json
 
     - name: Revert HeaderSelector
