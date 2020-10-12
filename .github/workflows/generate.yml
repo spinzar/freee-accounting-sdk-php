@@ -25,7 +25,7 @@ jobs:
 
     - name: Update lib version
       run: |
-        yq w .openapi-generator/config.yml artifactVersion v2.0.0-test
+        yq write -i .openapi-generator/config.yml artifactVersion v2.0.0-test
 
     - name: Generate APIs
       run: |
