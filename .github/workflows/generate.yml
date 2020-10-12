@@ -36,7 +36,7 @@ jobs:
           -o /local/
         rm -rf .travis.yml git_push.sh
         mv -f README.md README_auto-generated.md
-        sed -i -e 's#freee/freee-accounting-sdk-php[^(\.git)]#${{ env.PACKAGE_NAME }}#g' README_auto-generated.md
+        sed -i -e 's#"freee/freee-accounting-sdk-php"#"${{ env.PACKAGE_NAME }}"#g' README_auto-generated.md
         git checkout README.md
 
     - name: Maintain composer.json
