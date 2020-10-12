@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 env:
-  PACKAGE_NAME: freee/freee-accounting-sdk
+  PACKAGE_NAME: freee\/freee-accounting-sdk
   SCHEMA_URL: https://gist.githubusercontent.com/shibayan/3fdf5a66554e5e7ccfe4cc8350db86d7/raw/64548c7ad8bb4c65c0bbe1748ca8f759da648aa6/api-schema.yml
   KEEP_CURRENT_HEADER_SELECTOR: true
 
