@@ -5,6 +5,7 @@ on:
     branches: [ master ]
 
 env:
+  PACKAGE_NAME: freee/freee-accounting-sdk
   SCHEMA_URL: https://gist.githubusercontent.com/shibayan/3fdf5a66554e5e7ccfe4cc8350db86d7/raw/64548c7ad8bb4c65c0bbe1748ca8f759da648aa6/api-schema.yml
   KEEP_CURRENT_HEADER_SELECTOR: true
 
@@ -12,11 +13,21 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
+    - name: Install packages
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          yq
+
     - uses: actions/checkout@v2
 
     - name: Remove old codes
       run: |
         rm -rf .openapi-generator/VERSION docs lib test .php_cs .travis.yml git_push.sh phpunit.xml.dist
+
+    - name: Update lib version
+      run: |
+        yq w .openapi-generator/config.yml artifactVersion v2.0.0-test
 
     - name: Generate APIs
       run: |
@@ -27,8 +38,17 @@ jobs:
           -o /local/
         rm -rf .travis.yml git_push.sh
         mv -f README.md README_auto-generated.md
+        sed -i -e 's/freee\/freee-accounting-sdk-php/${{ env.PACKAGE_NAME }}/g' README_auto-generated.md
         git checkout README.md
-        # git checkout composer.json
+
+    - name: Maintain composer.json
+      run: |
+        cat composer.json | jq '. | .name = "${{ env.PACKAGE_NAME }}"' > composer.json
+        cat composer.json | jq '. | .type = "library"' > composer.json
+        cat composer.json | jq '. | .description = "Accounting freee PHP SDK"' > composer.json
+        cat composer.json | jq '. | .keywords += "api"' > composer.json
+        cat composer.json | jq '. | .homepage = "https://developer.freee.co.jp/"' > composer.json
+        cat composer.json | jq '. | .license = "MIT"' > composer.json
 
     - name: Revert HeaderSelector
       if: ${{ env.KEEP_CURRENT_HEADER_SELECTOR }}
